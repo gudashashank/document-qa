@@ -58,3 +58,12 @@ if openai_api_key:
 
         # Stream the response to the app using `st.write_stream`.
         st.write_stream(stream)
+        
+    st.markdown(
+    """
+    <div style='position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; color: grey;'>
+        IST-688 Shashank Guda
+    </div>
+    """,
+    unsafe_allow_html=True
+)
