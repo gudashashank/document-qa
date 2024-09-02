@@ -1,8 +1,8 @@
 import streamlit as st
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 
 # Show title and description.
-st.title("My Document question answering")
+st.title("My Document Question Answering")
 st.write(
     "Upload a document below and ask a question about it – GPT will answer! "
     "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
@@ -12,12 +12,19 @@ st.write(
 # Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
 # via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
 openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-else:
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+if openai_api_key:
+    try:
+        # Create an OpenAI client
+        client = OpenAI(api_key=openai_api_key)
+        client.models.list()
+        st.success("API key is valid! You can proceed.", icon="✅")
+    except OpenAIError as e:
+        st.error("Invalid API key. Please check and try again.", icon="❌")
+        st.stop()
+
+
+if openai_api_key:
 
     # Let the user upload a file via `st.file_uploader`.
     uploaded_file = st.file_uploader(
